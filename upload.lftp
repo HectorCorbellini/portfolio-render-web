@@ -1,0 +1,4 @@
+open ftpupload.net
+user b16_38009923 placita2010
+mirror -R dist /htdocs
+bye
