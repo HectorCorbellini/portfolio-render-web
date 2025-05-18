@@ -15,6 +15,10 @@ RUN apt-get update && apt-get install -y openjdk-17-jre-headless && rm -rf /var/
 # Copy all files
 COPY . .
 
+# Make sure apps directory exists and has correct permissions
+RUN mkdir -p /app/apps
+RUN chmod -R 755 /app/apps
+
 # Build the frontend
 RUN npm run build
 

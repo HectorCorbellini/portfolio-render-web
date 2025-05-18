@@ -1,11 +1,17 @@
 import { spawn } from 'child_process';
 import path from 'path';
+import fs from 'fs';
 import config from './config.js';
 
 function launchJavaApp(jarFileName, args = []) {
   return (req, res) => {
     console.log(`Handling demo request for ${jarFileName}`);
-    if (process.env.PROJECT_DOMAIN || process.env.VERCEL || process.env.VERCEL_ENV) {
+    console.log('Environment:', process.env.NODE_ENV);
+    console.log('Is Vercel:', !!process.env.VERCEL);
+    console.log('Is Vercel ENV:', !!process.env.VERCEL_ENV);
+    console.log('Current directory:', process.cwd());
+    if (process.env.PROJECT_DOMAIN || process.env.VERCEL || process.env.VERCEL_ENV || process.env.RENDER_ENV) {
+      console.log('Running in cloud environment, returning demo info');
       return res.json({
         success: true,
         message: `${jarFileName} Demo Information`,
@@ -14,6 +20,8 @@ function launchJavaApp(jarFileName, args = []) {
     }
 
     const jarPath = path.join(config.appsDir, jarFileName);
+    console.log('Jar path:', jarPath);
+    console.log('Checking if jar exists:', fs.existsSync(jarPath));
     try {
       const java = spawn('java', [...args, '-jar', jarPath]);
       java.stdout.on('data', data => console.log(`${jarFileName} stdout: ${data}`));
@@ -36,7 +44,12 @@ function launchJavaApp(jarFileName, args = []) {
 function launchExecutable(executableName) {
   return (req, res) => {
     console.log(`Handling demo request for ${executableName}`);
-    if (process.env.PROJECT_DOMAIN || process.env.VERCEL || process.env.VERCEL_ENV) {
+    console.log('Environment:', process.env.NODE_ENV);
+    console.log('Is Vercel:', !!process.env.VERCEL);
+    console.log('Is Vercel ENV:', !!process.env.VERCEL_ENV);
+    console.log('Current directory:', process.cwd());
+    if (process.env.PROJECT_DOMAIN || process.env.VERCEL || process.env.VERCEL_ENV || process.env.RENDER_ENV) {
+      console.log('Running in cloud environment, returning demo info');
       return res.json({
         success: true,
         message: `${executableName} Demo Information`,
@@ -45,6 +58,8 @@ function launchExecutable(executableName) {
     }
 
     const execPath = path.join(config.appsDir, executableName);
+    console.log('Executable path:', execPath);
+    console.log('Checking if executable exists:', fs.existsSync(execPath));
     try {
       const proc = spawn(execPath);
       proc.stdout.on('data', data => console.log(`${executableName} stdout: ${data}`));
