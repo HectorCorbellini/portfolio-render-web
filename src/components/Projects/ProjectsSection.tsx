@@ -24,8 +24,10 @@ const ProjectsSection: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ path }),
       });
-      if (!response.ok) {
-        const data = await response.json();
+      const data = await response.json();
+      if (response.ok) {
+        alert(`${data.message}\n${data.details}`);
+      } else {
         alert(`Failed to open project: ${data.error}`);
       }
     } catch (error) {
