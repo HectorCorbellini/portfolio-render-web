@@ -5,11 +5,11 @@ import config from './config.js';
 function launchJavaApp(jarFileName, args = []) {
   return (req, res) => {
     console.log(`Handling demo request for ${jarFileName}`);
-    if (process.env.PROJECT_DOMAIN) {
+    if (process.env.PROJECT_DOMAIN || process.env.VERCEL || process.env.VERCEL_ENV) {
       return res.json({
         success: true,
         message: `${jarFileName} Demo Information`,
-        details: `When running locally, this would launch the ${jarFileName}`
+        details: `This demo is only available when running locally`
       });
     }
 
@@ -36,11 +36,11 @@ function launchJavaApp(jarFileName, args = []) {
 function launchExecutable(executableName) {
   return (req, res) => {
     console.log(`Handling demo request for ${executableName}`);
-    if (process.env.PROJECT_DOMAIN) {
+    if (process.env.PROJECT_DOMAIN || process.env.VERCEL || process.env.VERCEL_ENV) {
       return res.json({
         success: true,
         message: `${executableName} Demo Information`,
-        details: `When running locally, this would launch the ${executableName}`
+        details: `This demo is only available when running locally`
       });
     }
 
