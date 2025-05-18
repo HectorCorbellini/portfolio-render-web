@@ -19,7 +19,7 @@ const ProjectsSection: React.FC = () => {
 
   const launchDemo = async (path: string) => {
     try {
-      const response = await fetch('http://localhost:3001/api/open', {
+      const response = await fetch('/api/open', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ path }),

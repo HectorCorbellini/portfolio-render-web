@@ -1,25 +1,35 @@
 #!/usr/bin/env bash
 
-# Exit immediately if a command exits with a non-zero status
 set -e
 
-# Start backend
-echo "Starting backend at http://localhost:3001..."
-npm run server &
-BACKEND_PID=$!
+# Interactive runner for development and testing
+echo "Select an option:"
+echo "1) Start development servers"
+echo "2) Run tests"
+echo "3) Run coverage report"
+echo "4) Exit"
 
-# Start frontend
-echo "Starting frontend at http://localhost:5173..."
-npm run dev &
-FRONTEND_PID=$!
+read -p "Enter choice [1-4]: " choice
 
-# Cleanup function to kill child processes on exit
-cleanup() {
-  echo "Shutting down servers..."
-  kill $BACKEND_PID $FRONTEND_PID
-  exit
-}
-trap cleanup SIGINT SIGTERM
-
-# Wait for backend and frontend processes
-wait $BACKEND_PID $FRONTEND_PID
+case "$choice" in
+  1)
+    echo "Starting development servers..."
+    npm run dev:all
+    ;;
+  2)
+    echo "Launching test menu..."
+    ./run_tests.sh
+    ;;
+  3)
+    echo "Running coverage report..."
+    npx vitest run --coverage
+    ;;
+  4)
+    echo "Exiting."
+    exit 0
+    ;;
+  *)
+    echo "Invalid choice: $choice"
+    exit 1
+    ;;
+esac

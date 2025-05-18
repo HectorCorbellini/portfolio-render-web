@@ -16,37 +16,87 @@ This document outlines the recent enhancements made to the portfolio project:
 
 ## Latest Improvements (2025-05-17)
 
-### Enhanced Project Demo Functionality
+### Server-Side Code Refactoring
 
-The portfolio application has been upgraded to provide a more interactive experience by directly launching project demos instead of just opening project directories. The following improvements have been implemented:
+The portfolio application's server-side code has been refactored to improve maintainability and scalability. The key changes include:
 
-#### 1. Ecosystem Simulation Project
+#### 1. Modular Demo Handler Architecture
 
-- **Feature**: When clicking the "Launch Demo" button for the Ecosystem Simulation project, the application now executes a Java JAR file directly.
-- **Implementation Details**:
-  - Modified the `/api/open` endpoint in `server.js` to detect requests for the ecosystem simulation project
-  - Added logic to execute `/root/EMPREND/Bolt-Portfolio/portfo/ecosystem-simulation.jar` using Java
-  - Configured the server to run the JAR file in the background and immediately respond to the frontend
-  - Added logging for stdout and stderr to facilitate debugging
+- **New File**: Created `demoHandlers.js` to encapsulate demo launch logic
+- **Reusable Functions**:
+  - `launchJavaApp`: Handles Java JAR file execution with configurable arguments
+  - `launchExecutable`: Manages native executable execution
+- **Handler Registry**: Centralized mapping of project names to their launch functions
 
-#### 2. Code Processor Project
+#### 2. Simplified Server Code
 
-- **Feature**: When clicking the "Launch Demo" button for the Code Processor project, the application now executes a native executable.
-- **Implementation Details**:
-  - Enhanced the `/api/open` endpoint to detect requests for the code processor project
-  - Added logic to execute `/root/EMPREND/Bolt-Portfolio/portfo/CodeProcessor` executable
-  - Implemented automatic permission setting using `chmod +x` to ensure the file is executable
-  - Configured the server to run the executable in the background and immediately respond to the frontend
-  - Added comprehensive logging for process output and errors
+- **Refactored `/api/open` Endpoint**:
+  - Removed repetitive conditional logic
+  - Added simple handler lookup mechanism
+  - Improved error handling and response consistency
+- **Better Code Organization**:
+  - Separated concerns between routing and execution
+  - Made the code more DRY (Don't Repeat Yourself)
+  - Improved extensibility for adding new demo types
 
-#### 3. Architecture Improvements
+#### 3. Enhanced Error Handling
 
-- **Conditional Execution Logic**: The server now intelligently determines how to handle each project based on its type:
-  - Ecosystem Simulation → Executes JAR file
-  - Code Processor → Executes native executable
-  - Other projects → Opens their directories using xdg-open (original behavior)
+- **Consistent Error Responses**: Standardized error message format across all handlers
+- **Improved Logging**: Added more detailed logging for debugging
+- **Better Error Recovery**: More robust error handling for process execution
 
-- **Error Handling**: Enhanced error handling for all execution paths with appropriate error messages and status codes
+### Frontend Error Handling Improvements
+
+The frontend error handling has been enhanced with:
+
+#### 1. Toast Notifications
+
+- Replaced simple alerts with toast notifications using react-toastify
+- Notifications appear in the top-right corner
+- Auto-close after 5 seconds
+- Better visual feedback for user actions
+
+#### 2. Error Boundary Implementation
+
+- Added React Error Boundary component
+- Catches and handles runtime errors in React components
+- Provides a fallback UI with reload option
+- Shows toast notifications on errors
+
+#### 3. Consistent Error Message Format
+
+- Standardized error message format across the application
+- Better user feedback for failed operations
+- Clear indication of error recovery options
+
+### Benefits of the Improvements
+
+- **Better User Experience**: More elegant error notifications
+- **Improved Error Recovery**: Better handling of runtime errors
+- **Consistent Feedback**: Standardized error message format
+- **Better Error Reporting**: More informative error messages
+- **Improved Maintainability**: Better organized error handling code
+
+### Configuration Management Improvements
+
+- **Centralized Config**: Introduced `config.js` for centralizing paths and settings
+- **Constants Defined**: `baseDir`, `appsDir`, `distDir`, `filesDir`, `defaultOpenCommand`, `demos`
+- **Code Update**: Replaced hardcoded paths in `server.js` and `demoHandlers.js` with config values
+- **Outcome**: Improved flexibility and maintainability
+
+### How to Run the Application
+
+1. Start the backend server: `node server.js` (runs on port 3001)
+2. Start the frontend development server: `npm run dev` (runs on port 5173)
+3. Access the portfolio at http://localhost:5173
+4. Click on project cards to view details and launch demos
+
+### How to Run the Application
+
+1. Start the backend server: `node server.js` (runs on port 3001)
+2. Start the frontend development server: `npm run dev` (runs on port 5173)
+3. Access the portfolio at http://localhost:5173
+4. Click on project cards to view details and launch demos
 
 ### How to Run the Application
 
