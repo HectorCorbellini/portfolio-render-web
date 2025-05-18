@@ -12,7 +12,8 @@
     "start": "node server.js",
     "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
     "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "vercel-build": "vite build"
   },
   "dependencies": {
     "cors": "^2.8.5",
