@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: portfolio
+    env: docker
+    buildCommand: docker build -t portfolio .
+    startCommand: docker run -p 3001:3001 portfolio
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
